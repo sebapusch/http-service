@@ -2,6 +2,14 @@
 test:
   path: /test
   controller: App\Controller\TestController::test
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+
+#index
+index:
+  path: /
+  controller: App\Controller\DefaultController::index
+
+#Api
+api:
+  path: /api/http
+  controller: App\Controller\HttpController::createRequest
+

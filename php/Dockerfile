@@ -6,9 +6,9 @@ RUN apt update \
     && pecl install apcu \
     && docker-php-ext-enable apcu \
     && docker-php-ext-configure zip \
-    && docker-php-ext-install zip \
+    && docker-php-ext-install zip
 
-WORKDIR /var/www/http_tool
+WORKDIR /var/www/http-service
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 

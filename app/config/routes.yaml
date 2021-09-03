@@ -12,4 +12,5 @@ index:
 api:
   path: /api/http
   controller: App\Controller\HttpController::createRequest
+  methods: POST
 

@@ -1,5 +1,11 @@
 monolog:
+    channels: ['http']
     handlers:
+        http:
+            level: info
+            type: stream
+            path: "%kernel.logs_dir%/httpService.log"
+            channels: ['http']
         main:
             type: fingers_crossed
             action_level: error

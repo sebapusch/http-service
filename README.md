@@ -46,13 +46,18 @@ npm install
 yarn install
 ```
 
-9. Make a copy of `http-service/app/.env` in the same directory and name it `.env.local`
+9. Run
+```shell
+npm run dev
+```
 
-10. Open the created `http-service/app/.env.local` file and change the following
+11. Make a copy of `http-service/app/.env` in the same directory and name it `.env.local`
+
+12. Open the created `http-service/app/.env.local` file and change the following
 
     - MAILER_DSN: [How to set up Amazon SES](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-smtp.html)
     - ERROR_STATUS_EMAIL=A verified email address to where you want to receive your error status emails
 
-11. Enjoy
+13. navigate to `localhost:8080` --> Enjoy
 
 

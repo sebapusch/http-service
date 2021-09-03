@@ -14,11 +14,13 @@ interface HttpServiceInterface
 
     public const HTTP_OK = 'ok';
     public const HTTP_NOT_FOUND = 'not_found';
+    public const HTTP_UNAUTHORIZED = 'unauthorized';
     /** @todo add */
 
     public const statusCodes = [
         HttpServiceInterface::HTTP_OK => 200,
-        HttpServiceInterface::HTTP_NOT_FOUND => 404
+        HttpServiceInterface::HTTP_NOT_FOUND => 404,
+        HttpServiceInterface::HTTP_UNAUTHORIZED => 401
     ];
 
     /**
@@ -26,4 +28,6 @@ interface HttpServiceInterface
      * @return Response
      */
     public function sendRequest(Request $request): Response;
+    public function enableLogging(): void;
+    public function setUpEmails(array $emails): bool;
 }

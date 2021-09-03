@@ -6,7 +6,7 @@ use App\Service\HttpService\Exception\InvalidMethodException;
 use App\Service\HttpService\Exception\InvalidUrlFormatException;
 use App\Service\HttpServiceInterface;
 
-class Request
+class Request implements \JsonSerializable
 {
     private string $url;
     private string $method;
@@ -69,11 +69,11 @@ class Request
      */
     private function validateUrl(string $url): bool
     {
-        if (filter_var($url, FILTER_VALIDATE_URL)) {
-            return true;
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -82,14 +82,15 @@ class Request
     public function getContext()
     {
         $header = '';
-        foreach($this->headers as $key => $value) {
-            $header = sprintf("%s\r\n%s:%s", $header, $key, $value);
+        foreach($this->headers as $value) {
+            $header = sprintf("%s\r\n%s:%s", $header, $value['key'], $value['value']);
         }
 
         $options = ['http' => [
             'method' => $this->method,
             'header' => $header,
-            'content' => $this->content
+            'content' => $this->content,
+            'ignore_errors' => true
         ]];
 
         return stream_context_create($options);
@@ -98,11 +99,19 @@ class Request
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl(bool $withQueryParams = true): string
     {
-        return empty($this->queryParams)
+        return (!$withQueryParams || empty($this->queryParams))
             ? $this->url
             : $this->buildUrlWithQueryParams();
+    }
+
+    /**
+     * @return array
+     */
+    public function getQueryParams(): array
+    {
+        return $this->queryParams;
     }
 
     /**
@@ -113,10 +122,10 @@ class Request
         $url = $this->url . '?';
         $counter = 0;
 
-        foreach ($this->queryParams as $key => $value) {
+        foreach ($this->queryParams as $value) {
             $url = ($counter === 0)
-                ? sprintf('%s%s=%s', $url, $key, $value)
-                : sprintf('%s&%s=%s', $url, $key, $value);
+                ? sprintf('%s%s=%s', $url, $value['key'], $value['value'])
+                : sprintf('%s&%s=%s', $url, $value['key'], $value['value']);
 
             $counter ++;
         }
@@ -181,4 +190,14 @@ class Request
     }
 
 
+    public function jsonSerialize()
+    {
+        return [
+            'url' => $this->url,
+            'method' => $this->method,
+            'headers' => $this->headers,
+            'queryParams' => $this->queryParams,
+            'content' => $this->content,
+        ];
+    }
 }
